@@ -1,13 +1,10 @@
 # cse124-project2
 
-PLEASE REFER to py/block_store.html and py/metadata_store.html for block_store.py and metadata_store.py documentation respectively. 
-
-CSE 124 Project 2 starter code
-Copyright (C) George Porter, 2017.
+UCSD CSE 124 Project 2
 
 ## Overview
 
-This is the starter code for the Java implementation of SurfStore.
+code for Project 2 Surfstore
 
 ## To build the protocol buffer IDL into auto-generated stubs:
 
