@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module metadata_store</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>metadata_store</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/moizqureshi/Desktop/cse124/proj/cse-124-project-2-cs_g0ds/py/metadata_store.py">/Users/moizqureshi/Desktop/cse124/proj/cse-124-project-2-cs_g0ds/py/metadata_store.py</a></font></td></tr></table>
+    <p><tt>SurfStore&nbsp;Metadata&nbsp;Server&nbsp;<br>
+&nbsp;<br>
+The&nbsp;Metadata&nbsp;Server&nbsp;runs&nbsp;three&nbsp;processes/instances&nbsp;(indivdually&nbsp;started),&nbsp;where&nbsp;one&nbsp;process/instance&nbsp;is&nbsp;<br>
+a&nbsp;leader,&nbsp;and&nbsp;the&nbsp;remaining&nbsp;two&nbsp;are&nbsp;followers.<br>
+&nbsp;<br>
+The&nbsp;Metadata&nbsp;Servers&nbsp;are&nbsp;responsible&nbsp;for&nbsp;the&nbsp;handling&nbsp;of&nbsp;all&nbsp;commands&nbsp;from&nbsp;the&nbsp;client,&nbsp;as&nbsp;well&nbsp;as&nbsp;keeping<br>
+track&nbsp;of&nbsp;the&nbsp;relation&nbsp;to&nbsp;filename,&nbsp;versions,&nbsp;and&nbsp;blocks/blocklist.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="SurfStoreBasic_pb2.html">SurfStoreBasic_pb2</a><br>
+<a href="SurfStoreBasic_pb2_grpc.html">SurfStoreBasic_pb2_grpc</a><br>
+</td><td width="25%" valign=top><a href="argparse.html">argparse</a><br>
+<a href="concurrent.futures.html">concurrent.futures</a><br>
+</td><td width="25%" valign=top><a href="grpc.html">grpc</a><br>
+<a href="threading.html">threading</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="SurfStoreBasic_pb2_grpc.html#MetadataStoreServicer">SurfStoreBasic_pb2_grpc.MetadataStoreServicer</a>(<a href="builtins.html#object">builtins.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="metadata_store.html#MetadataStore">MetadataStore</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="MetadataStore">class <strong>MetadataStore</strong></a>(<a href="SurfStoreBasic_pb2_grpc.html#MetadataStoreServicer">SurfStoreBasic_pb2_grpc.MetadataStoreServicer</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#MetadataStore">MetadataStore</a>&nbsp;Class<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;config&nbsp;(obj):&nbsp;Configuration&nbsp;object&nbsp;read&nbsp;and&nbsp;parsed&nbsp;from&nbsp;config&nbsp;file<br>
+&nbsp;&nbsp;&nbsp;&nbsp;isLeader&nbsp;(bool):&nbsp;Boolean&nbsp;representing&nbsp;if&nbsp;this&nbsp;instance&nbsp;is&nbsp;a&nbsp;leader&nbsp;or&nbsp;not<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;myMetaDataStore&nbsp;(dict):&nbsp;Holds&nbsp;the&nbsp;state&nbsp;of&nbsp;files,&nbsp;versions,&nbsp;and&nbsp;their&nbsp;blocklists<br>
+&nbsp;&nbsp;&nbsp;&nbsp;config&nbsp;(obj):&nbsp;Configuration&nbsp;object&nbsp;needed&nbsp;to&nbsp;produce&nbsp;stubs&nbsp;to&nbsp;other&nbsp;follower&nbsp;Metadata&nbsp;Servers<br>
+&nbsp;&nbsp;&nbsp;&nbsp;isLeader&nbsp;(bool):&nbsp;Boolean&nbsp;representing&nbsp;if&nbsp;this&nbsp;Metadata&nbsp;Server&nbsp;instance&nbsp;is&nbsp;a&nbsp;leader&nbsp;or&nbsp;not<br>
+&nbsp;&nbsp;&nbsp;&nbsp;isCrashed&nbsp;(bool):&nbsp;Boolean&nbsp;representing&nbsp;if&nbsp;this&nbsp;Metadata&nbsp;Server&nbsp;instance&nbsp;is&nbsp;crashed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;logs&nbsp;(dict):&nbsp;Holds&nbsp;all&nbsp;the&nbsp;logs&nbsp;of&nbsp;each&nbsp;command&nbsp;(except&nbsp;for&nbsp;Read&nbsp;commands)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;follower_stubs&nbsp;(list):&nbsp;List&nbsp;containing&nbsp;stubs&nbsp;to&nbsp;connect&nbsp;to&nbsp;follower&nbsp;servers<br>
+&nbsp;&nbsp;&nbsp;&nbsp;follower1_missedLogs&nbsp;(list):&nbsp;List&nbsp;containing&nbsp;missed&nbsp;log&nbsp;entries&nbsp;for&nbsp;follower&nbsp;#1&nbsp;server&nbsp;when&nbsp;it&nbsp;was&nbsp;crashed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;follower2_missedLogs&nbsp;(list):&nbsp;List&nbsp;containing&nbsp;missed&nbsp;log&nbsp;entries&nbsp;for&nbsp;follower&nbsp;#2&nbsp;server&nbsp;when&nbsp;it&nbsp;was&nbsp;crashed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;currentCommandIndex&nbsp;(int):&nbsp;Current&nbsp;Index&nbsp;of&nbsp;command/log<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="metadata_store.html#MetadataStore">MetadataStore</a></dd>
+<dd><a href="SurfStoreBasic_pb2_grpc.html#MetadataStoreServicer">SurfStoreBasic_pb2_grpc.MetadataStoreServicer</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="MetadataStore-AppendEntries"><strong>AppendEntries</strong></a>(self, request, context)</dt><dd><tt>AppendEntries&nbsp;RPC&nbsp;Function<br>
+&nbsp;<br>
+Used&nbsp;by&nbsp;Leader&nbsp;<a href="#MetadataStore">MetadataStore</a>&nbsp;Server&nbsp;to&nbsp;sync&nbsp;missing&nbsp;logs&nbsp;when&nbsp;a&nbsp;follower&nbsp;was&nbsp;down<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;(LogEntry):&nbsp;Missing&nbsp;Log&nbsp;Entry<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;LogEntries:&nbsp;LogEntries&nbsp;RPC&nbsp;Message</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-Commit"><strong>Commit</strong></a>(self, request, context)</dt><dd><tt>Commit&nbsp;RPC&nbsp;Function<br>
+&nbsp;<br>
+RPC&nbsp;needed&nbsp;for&nbsp;part&nbsp;two&nbsp;of&nbsp;2-Phase&nbsp;Commit<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;(LogEntry):&nbsp;LogEntry&nbsp;object&nbsp;that&nbsp;will&nbsp;be&nbsp;converted&nbsp;to&nbsp;a&nbsp;command&nbsp;after&nbsp;this&nbsp;call&nbsp;succeeds<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SimpleAnswer:&nbsp;SimpleAnswer&nbsp;RPC&nbsp;Message</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-Crash"><strong>Crash</strong></a>(self, request, context)</dt><dd><tt>Crash&nbsp;RPC&nbsp;Function<br>
+&nbsp;<br>
+RPC&nbsp;Function&nbsp;used&nbsp;to&nbsp;emulate&nbsp;a&nbsp;"crashed"&nbsp;server&nbsp;state&nbsp;(only&nbsp;Follower&nbsp;Metadata&nbsp;Server&nbsp;will&nbsp;crash)<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;(Empty):&nbsp;Empty&nbsp;RPC&nbsp;Message<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Empty:&nbsp;Empty&nbsp;RPC&nbsp;Message</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-DeleteFile"><strong>DeleteFile</strong></a>(self, request, context)</dt><dd><tt>DeleteFile&nbsp;RPC&nbsp;Function<br>
+&nbsp;<br>
+ModifyFile&nbsp;Command&nbsp;<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;(FileInfo):&nbsp;Contains&nbsp;filename&nbsp;to&nbsp;delete&nbsp;blocklist&nbsp;for&nbsp;in&nbsp;myMetadataStore,&nbsp;granted&nbsp;correct&nbsp;versions&nbsp;was&nbsp;supplied<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;WriteResult:&nbsp;WriteResult&nbsp;RPC&nbsp;Message&nbsp;that&nbsp;indicates&nbsp;success&nbsp;or&nbsp;failure&nbsp;of&nbsp;this&nbsp;operation</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-IsCrashed"><strong>IsCrashed</strong></a>(self, request, context)</dt><dd><tt>IsCrashed&nbsp;RPC&nbsp;Function<br>
+&nbsp;<br>
+RPC&nbsp;Function&nbsp;used&nbsp;to&nbsp;determine&nbsp;if&nbsp;a&nbsp;Metadata&nbsp;Server&nbsp;is&nbsp;in&nbsp;an&nbsp;emulated&nbsp;"crashed"&nbsp;state&nbsp;or&nbsp;not<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;(Empty):&nbsp;Empty&nbsp;Object<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SimpleAnswer:&nbsp;True&nbsp;if&nbsp;crashed,&nbsp;false&nbsp;otherwise</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-IsLeader"><strong>IsLeader</strong></a>(self, request, context)</dt><dd><tt>IsLeader&nbsp;RPC&nbsp;Function<br>
+&nbsp;<br>
+RPC&nbsp;Function&nbsp;used&nbsp;to&nbsp;determine&nbsp;if&nbsp;a&nbsp;Metadata&nbsp;Server&nbsp;is&nbsp;a&nbsp;leader&nbsp;or&nbsp;not<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;(Empty):&nbsp;Empty&nbsp;Object<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SimpleAnswer:&nbsp;True&nbsp;if&nbsp;leader,&nbsp;false&nbsp;otherwise</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-ModifyFile"><strong>ModifyFile</strong></a>(self, request, context)</dt><dd><tt>ModifyFile&nbsp;RPC&nbsp;Function<br>
+&nbsp;<br>
+ModifyFile&nbsp;Command&nbsp;<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;(FileInfo):&nbsp;Contains&nbsp;filename,&nbsp;with&nbsp;updated&nbsp;version&nbsp;and&nbsp;blocklist,&nbsp;to&nbsp;update&nbsp;myMetadataStore&nbsp;with<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;WriteResult:&nbsp;WriteResult&nbsp;RPC&nbsp;Message&nbsp;that&nbsp;indicates&nbsp;success&nbsp;or&nbsp;failure&nbsp;of&nbsp;this&nbsp;operation</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-Ping"><strong>Ping</strong></a>(self, request, context)</dt><dd><tt>Ping&nbsp;RPC&nbsp;Function<br>
+&nbsp;<br>
+Checks&nbsp;to&nbsp;see&nbsp;if&nbsp;a&nbsp;server&nbsp;is&nbsp;alive,&nbsp;by&nbsp;having&nbsp;a&nbsp;respond&nbsp;with&nbsp;an&nbsp;Empty&nbsp;RPC&nbsp;Message&nbsp;object<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;(Empty):&nbsp;Empty&nbsp;Object<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SimpleAnswer:&nbsp;SimpleAnswer&nbsp;RPC&nbsp;Message</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-Prepare"><strong>Prepare</strong></a>(self, request, context)</dt><dd><tt>Prepare&nbsp;RPC&nbsp;Function<br>
+&nbsp;<br>
+RPC&nbsp;needed&nbsp;for&nbsp;part&nbsp;one&nbsp;of&nbsp;2-Phase&nbsp;Commit<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;(Empty):&nbsp;Empty&nbsp;Object<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SimpleAnswer:&nbsp;SimpleAnswer&nbsp;RPC&nbsp;Message</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-ReadFile"><strong>ReadFile</strong></a>(self, request, context)</dt><dd><tt>ReadFile&nbsp;RPC&nbsp;Function<br>
+&nbsp;<br>
+ReadFile&nbsp;Command&nbsp;<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;(FileInfo):&nbsp;Contains&nbsp;filename&nbsp;for&nbsp;which&nbsp;to&nbsp;return&nbsp;version&nbsp;and&nbsp;blocklist&nbsp;for<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FileInfo:&nbsp;Returns&nbsp;a&nbsp;FileInfo&nbsp;object&nbsp;with&nbsp;version&nbsp;and&nbsp;blocklist&nbsp;appropriately&nbsp;set</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-Restore"><strong>Restore</strong></a>(self, request, context)</dt><dd><tt>Restore&nbsp;RPC&nbsp;Function<br>
+&nbsp;<br>
+RPC&nbsp;Function&nbsp;used&nbsp;to&nbsp;restore&nbsp;a&nbsp;follower&nbsp;Metadata&nbsp;Server&nbsp;from&nbsp;its&nbsp;emulated&nbsp;"crashed"&nbsp;state<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;(Empty):&nbsp;Empty&nbsp;RPC&nbsp;Message<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Empty:&nbsp;Empty&nbsp;RPC&nbsp;Message</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-TwoPhaseCommit"><strong>TwoPhaseCommit</strong></a>(self)</dt><dd><tt>Helper&nbsp;Function&nbsp;to&nbsp;carry&nbsp;out&nbsp;2-Phase&nbsp;Commit&nbsp;with&nbsp;follower&nbsp;server<br>
+&nbsp;<br>
+Allows&nbsp;for&nbsp;a&nbsp;command&nbsp;to&nbsp;be&nbsp;processed&nbsp;if&nbsp;the&nbsp;majority&nbsp;(qty:&nbsp;1)&nbsp;of&nbsp;the&nbsp;follower&nbsp;servers&nbsp;are&nbsp;online,&nbsp;if&nbsp;not,&nbsp;then&nbsp;<br>
+this&nbsp;Two-Phase&nbsp;Commit&nbsp;process&nbsp;will&nbsp;block&nbsp;untul&nbsp;the&nbsp;majority&nbsp;are&nbsp;onlne<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-__init__"><strong>__init__</strong></a>(self, config, isLeader)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-addEntryToLog"><strong>addEntryToLog</strong></a>(self, log)</dt><dd><tt>Adds&nbsp;a&nbsp;command&nbsp;entry&nbsp;to&nbsp;the&nbsp;log<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;log&nbsp;(obj):&nbsp;Log&nbsp;object&nbsp;to&nbsp;add&nbsp;to&nbsp;logs&nbsp;dictionary<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None.</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-createLogFromCommand"><strong>createLogFromCommand</strong></a>(self, request, command)</dt><dd><tt>Helper&nbsp;Log&nbsp;Creation&nbsp;Function<br>
+&nbsp;<br>
+Creates&nbsp;a&nbsp;log&nbsp;from&nbsp;a&nbsp;FileInfo&nbsp;object&nbsp;and&nbsp;adds&nbsp;this&nbsp;log&nbsp;to&nbsp;our&nbsp;collection<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request&nbsp;(FileInfo):&nbsp;FileInfo&nbsp;object&nbsp;for&nbsp;a&nbsp;command<br>
+&nbsp;&nbsp;&nbsp;&nbsp;command&nbsp;(int):&nbsp;Command&nbsp;Enum&nbsp;referencing&nbsp;type&nbsp;of&nbsp;command<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-get_block_stub"><strong>get_block_stub</strong></a>(self)</dt><dd><tt>Helper&nbsp;Function&nbsp;to&nbsp;Produce&nbsp;Block&nbsp;Stub<br>
+&nbsp;<br>
+Used&nbsp;to&nbsp;get&nbsp;stub&nbsp;for&nbsp;the&nbsp;BlockStore&nbsp;Server<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-get_follower_stubs"><strong>get_follower_stubs</strong></a>(self)</dt><dd><tt>Helper&nbsp;Function&nbsp;to&nbsp;Produce&nbsp;Follower&nbsp;Metadata&nbsp;Server&nbsp;Stub<br>
+&nbsp;<br>
+Used&nbsp;to&nbsp;get&nbsp;stubs&nbsp;for&nbsp;the&nbsp;Follower&nbsp;Metadata&nbsp;Servers<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-syncMissingLogs"><strong>syncMissingLogs</strong></a>(self)</dt><dd><tt>Helper&nbsp;Missing&nbsp;Log&nbsp;Sync&nbsp;Function&nbsp;<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;is&nbsp;called&nbsp;on&nbsp;a&nbsp;seperate&nbsp;thread.&nbsp;Every&nbsp;500ms&nbsp;it&nbsp;attempts&nbsp;to&nbsp;send&nbsp;any&nbsp;missing&nbsp;logs<br>
+to&nbsp;both&nbsp;followers<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="MetadataStore-updateMetadataStoreFromLog"><strong>updateMetadataStoreFromLog</strong></a>(self, log)</dt><dd><tt>Helper&nbsp;Function&nbsp;to&nbsp;Update&nbsp;myMetadataStore&nbsp;from&nbsp;a&nbsp;Log&nbsp;Entry<br>
+&nbsp;<br>
+Used&nbsp;by&nbsp;AppendEntries&nbsp;RPC&nbsp;Call&nbsp;to&nbsp;updata&nbsp;a&nbsp;follower's&nbsp;myMetadataStore&nbsp;from&nbsp;a&nbsp;missing&nbsp;log&nbsp;entry<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;log&nbsp;(LogEntry):&nbsp;Missing&nbsp;Log&nbsp;Entry<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="SurfStoreBasic_pb2_grpc.html#MetadataStoreServicer">SurfStoreBasic_pb2_grpc.MetadataStoreServicer</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-parse_args"><strong>parse_args</strong></a>()</dt><dd><tt>Helper&nbsp;Function&nbsp;to&nbsp;Parse&nbsp;command-line&nbsp;arguments<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-serve"><strong>serve</strong></a>(args, config)</dt><dd><tt>Helper&nbsp;Function&nbsp;to&nbsp;start&nbsp;the&nbsp;Metadata&nbsp;Server&nbsp;instance<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;args&nbsp;(obj):&nbsp;command&nbsp;line&nbsp;arguments&nbsp;object,&nbsp;made&nbsp;by&nbsp;ArgumentParser<br>
+&nbsp;&nbsp;&nbsp;&nbsp;config&nbsp;(obj):&nbsp;configuration&nbsp;object&nbsp;produced&nbsp;by&nbsp;ConfigReader&nbsp;from&nbsp;config&nbsp;text&nbsp;files<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+</td></tr></table>
+</body></html>

@@ -1,0 +1,38 @@
+## BlockStore tests (b), 10 points
+
+* b1 (2): Test for non-existent block
+* b2a (1): Add a block and test that HasBlock() returns true
+* b2b (1): Add another block and test that HasBlock() returns true
+* b2c (2): Ensure a different block object returns true (tests hash function)
+* b3a (2): Getting a block should return the right data
+* b3b (2): Getting a second, different block should return the right data
+
+## Centralized Metadata tests (mc), 50 points
+
+* Version tests (25 points)
+  * mc1 (3): Creating non-existent file (v0 to v1)
+  * mc2 (3): Updating newly created file to version 2 (v1 to v2)
+  * mc3 (3): Creating second non-existent file (v0 to v1)
+  * mc4 (3): Updating newly created file to version 2 (v1 to v2)
+  * mc5 (3): Erroneously trying to update v2 file to v5
+  * mc6 (3): Erroneously trying to update v2 file to v1
+  * mc7 (3): Erroneously trying to update v2 file to v2
+  * mc8 (4): Read of non-existent file should return version 0
+* Missing blocks protocol (10 points)
+  * mc9 (2): File w/ two blocks reports all blocks missing
+  * mc10 (2): After adding block, only reports one missing
+  * mc11 (2): After adding second block, reports OK
+  * mc12 (4): Separate file w/ both blocks immediately shows at OK
+* Delete file tests (10 points)
+  * mc13 (10): Delete ver1 file, should be ver2 with 0 blocklist
+* Create-after-delete (5 points)
+  * mc14 (5): Delete ver1 file, then create ver 2, should return OK
+
+## Distributed Metadata tests (md), 40 points
+
+* System should work when a minority of md servers have crashed (20)
+  * md1 (10): Working nodes should stay updated during crash events
+  * md2 (10): Crashed node should not be updated during crash events
+* Once crashed nodes recover, they should come back up-to-date (20)
+  * md3 (10): After 5 seconds, crashed nodes should come back up-to-date
+  * md4 (10): After recovery, system should continue working

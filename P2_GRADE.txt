@@ -1,0 +1,57 @@
+CSE 124 Fall 2017 Project 2 grade:
+
+Test b1: 2.0/2 points.
+Comments: 
+Test b2a: 1.0/1 points.
+Comments: 
+Test b2b: 1.0/1 points.
+Comments: 
+Test b2c: 2.0/2 points.
+Comments: 
+Test b3a: 2.0/2 points.
+Comments: 
+Test b3b: 2.0/2 points.
+Comments: 
+Test mc1: 2.4/3 points.
+Comments: 
+Test mc10: 1.6/2 points.
+Comments: 
+Test mc11: 1.6/2 points.
+Comments: 
+Test mc12: 3.2/4 points.
+Comments: 
+Test mc13: 8.0/10 points.
+Comments: 
+Test mc14: 4.0/5 points.
+Comments: 
+Test mc2: 2.4/3 points.
+Comments: 
+Test mc3: 2.4/3 points.
+Comments: 
+Test mc4: 2.4/3 points.
+Comments: 
+Test mc5: 2.4/3 points.
+Comments: 
+Test mc6: 2.4/3 points.
+Comments: 
+Test mc7: 2.4/3 points.
+Comments: 
+Test mc8: 3.2/4 points.
+Comments: 
+Test mc9: 1.6/2 points.
+Comments: 
+Test md1: 10.0/10 points.
+Comments: 
+Test md2: 10.0/10 points.
+Comments: 
+Test md3: 10.0/10 points.
+Comments: 
+Test md4: 10.0/10 points.
+Comments: 
+
+Your submission crashed when running with a centralized configuration.
+We attempted to rerun the centralized metadata store test
+with a distributed configuration, but at a 20% penalty.
+
+Late days used: 0 (-0)
+Total: 90.0/100
